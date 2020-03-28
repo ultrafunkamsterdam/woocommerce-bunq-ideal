@@ -8,14 +8,26 @@
  * Version: 1.0.0
  */
 defined( 'ABSPATH' ) || exit;
-add_filter( 'woocommerce_payment_gateways', 'bunq_ideal_add_gateway' );
-function bunq_ideal_add_gateway( $methods )
+
+add_filter( 'woocommerce_payment_gateways', 'bunq_ideal_gateway_add' );
+function bunq_ideal_gateway_add( $methods )
 {
         $methods[ ] = 'WC_Gateway_Bunq_Ideal';
         return $methods;
 }
-add_action( 'plugins_loaded', 'bunq_ideal_init_gateway' );
-function bunq_ideal_init_gateway()
+
+
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'bunq_ideal_gateway_options_link' );
+function bunq_ideal_gateway_options_link( $links ) {
+	$plugin_links = array(
+		'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout' ) . '">' . __( 'Settings', 'bunq-ideal-gateway' ) . '</a>',
+	);
+	return array_merge( $plugin_links, $links );
+}
+
+
+add_action( 'plugins_loaded', 'bunq_ideal_gateway_init' );
+function bunq_ideal_gateway_init()
 {
         class WC_Gateway_Bunq_Ideal extends WC_Payment_Gateway
         {
@@ -40,7 +52,7 @@ function bunq_ideal_init_gateway()
                                  &$this,
                                 'check_ipn' 
                         ) );
-                        // Checking if apikey is not empty.
+                        
                         if ( empty( $this->bunqme_url ) === true ) {
                                 add_action( 'admin_notices', function()
                                 {
@@ -48,11 +60,12 @@ function bunq_ideal_init_gateway()
 			    <div class="notice notice-error">
 				<p><?php
                                         _e( 'your bunq.me username is not specified. The payment gateway will not work until this is fixed', 'bunq-ideal' );
-?></p>
+				   ?>
+			       </p>
 			    </div>
 			    <?php
-                                } );
-                        }
+                               }  ); //add_action
+                        } // if 
                 }
                 /**
                  * 
@@ -72,7 +85,7 @@ function bunq_ideal_init_gateway()
                                         'type' => 'text',
                                         'description' => 'This controls the title which the user sees during checkout.',
                                         'default' => 'iDeal',
-                                        'desc_tip' => true 
+                                      
                                 ),
                                 'description' => array(
                                          'title' => 'Description',
@@ -85,7 +98,7 @@ function bunq_ideal_init_gateway()
                                         'type' => 'text',
                                         'description' => 'This should be your personal bunq.me link',
                                         'default' => 'https://bunq.me/....',
-                                        'desc_tip' => true 
+                                    
                                 ) 
                         );
                 }
@@ -104,44 +117,44 @@ function bunq_ideal_init_gateway()
                  */
                 public function payment_scripts()
                 {
-?>
-            <script>
-                function getIdealIssuers() {
-                    jQuery.ajax({
-                        type: 'GET',
-                        url: 'https://api.bunq.me/v1/bunqme-merchant-directory-ideal',
-                        beforeSend: function(xhr) {
-                            xhr.setRequestHeader("X-Bunq-Client-Request-Id", guid());
-                            xhr.setRequestHeader("X-Bunq-Geolocation", "0 0 0 0 NL");	
-                            xhr.setRequestHeader("X-Bunq-Language", "en_US");	
-                            xhr.setRequestHeader("X-Bunq-Region", "en_US");	
-                        },
-                        success: function(issuerData) {
-                            idealIssuers = issuerData['Response'][0]['IdealDirectory']['country'][0]['issuer'];
-                            jQuery.each(idealIssuers, function(key, value) {   
-                                jQuery('#idealIssuer').append(jQuery("<option></option>")
-                                    .attr("value",value.bic)
-                                    .text(value.name)); 
-                            });
-//                             $('#idealIssuer').show()
-                        }
-                    });
-                }
+			?>
+		    <script>
+			function getIdealIssuers() {
+			    jQuery.ajax({
+				type: 'GET',
+				url: 'https://api.bunq.me/v1/bunqme-merchant-directory-ideal',
+				beforeSend: function(xhr) {
+				    xhr.setRequestHeader("X-Bunq-Client-Request-Id", guid());
+				    xhr.setRequestHeader("X-Bunq-Geolocation", "0 0 0 0 NL");	
+				    xhr.setRequestHeader("X-Bunq-Language", "en_US");	
+				    xhr.setRequestHeader("X-Bunq-Region", "en_US");	
+				},
+				success: function(issuerData) {
+				    idealIssuers = issuerData['Response'][0]['IdealDirectory']['country'][0]['issuer'];
+				    jQuery.each(idealIssuers, function(key, value) {   
+					jQuery('#idealIssuer').append(jQuery("<option></option>")
+					    .attr("value",value.bic)
+					    .text(value.name)); 
+				    });
+	//                             $('#idealIssuer').show()
+				}
+			    });
+			}
 
-                function guid() {
-                    function s4() {
-                        return Math.floor((1 + Math.random()) * 0x10000)
-                            .toString(16)
-                            .substring(1);
-                        }
-                    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-    }
+			function guid() {
+			    function s4() {
+				return Math.floor((1 + Math.random()) * 0x10000)
+				    .toString(16)
+				    .substring(1);
+				}
+			    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+	    		}
                 </script>
 
-                <div id="iDEAL">
+                <div id="iDEAL" style="display:flex; width:100%; padding:1em; flex-direction:row; align-items:center">
                     <b>Bank: </b> 
-                    <select name="idealIssuer" id="idealIssuer">
-                        <option value="" disabled="" selected="">------------SELECT------------</option>
+                    <select name="idealIssuer" id="idealIssuer" style="padding:5px; font-weight:bold; color:rgba(255,255,255,.9);">
+                        <option value="" disabled="" selected="">- - - - - - SELECT- - - - - -</option>
                     </select>
                     <br/>
                 </div>
@@ -168,7 +181,7 @@ function bunq_ideal_init_gateway()
                         $issuer     = sanitize_text_field( $_POST[ 'idealIssuer' ] );
                         $ideal_ref  = esc_html( get_bloginfo( 'name' ) ) . "-" . strval( $order_id );
                         $ideal_link = $this->generate_ideal_link( $amount, $ideal_ref, $issuer );
-                        $order->update_status( 'on-hold', __( 'awaiting ideal payment completed', 'bunq-ideal' ) );
+                        $order->update_status( 'on-hold', __( 'awaiting ideal payment completed', 'bunq-ideal-gateway' ) );
                         if ( !empty( $ideal_link ) ) {
                                 return array(
                                          'result' => 'success',
@@ -331,10 +344,10 @@ function bunq_ideal_init_gateway()
                         {
                                 // POST data
                                 $postArray               = array(
-                                         'pointer' => array(
+                                         'pointer' => [
                                                  'type' => 'URL',
                                                 'value' => $bunqmeUrl 
-                                        ) 
+                                        ]
                                 );
                                 $postData                = json_encode( $postArray );
                                 $headers                 = array(
@@ -358,10 +371,10 @@ function bunq_ideal_init_gateway()
                         {
                                 // POST data
                                 $postArray = array(
-                                         'amount_requested' => array(
+                                         'amount_requested' => [
                                                  'currency' => 'EUR',
                                                 'value' => $amount 
-                                        ),
+                                        ],
                                         'issuer' => $issuer,
                                         'merchant_type' => 'IDEAL',
                                         'bunqme_type' => 'FUNDRAISER',
