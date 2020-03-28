@@ -1,5 +1,14 @@
 <?php
-/**
+/*
+ * Plugin Name: Bunq iDeal Payment Gateway
+ * Plugin URI: https://github.com/ultrafunkamsterdam
+ * Description: Accept iDeal Payments on your Woocoommerce store
+ * Author: Ultrafunkamsterdam
+ * Author URI: https://github.com/ultrafunkamsterdam
+ * Version: 1.0.0
+*/
+
+/*
  * Class and Function List:
  * Function list:
  * - bunq_ideal_gateway_add()
@@ -24,14 +33,10 @@
  * Classes list:
  * - WC_Gateway_Bunq_Ideal extends WC_Payment_Gateway
  */
-/*
- * Plugin Name: Bunq iDeal Payment Gateway
- * Plugin URI: https://github.com/ultrafunkamsterdam
- * Description: Accept iDeal Payments on your Woocoommerce store
- * Author: Ultrafunkamsterdam
- * Author URI: https://github.com/ultrafunkamsterdam
- * Version: 1.0.0
-*/
+
+	
+	
+	
 defined('ABSPATH') || exit;
 
 add_filter('woocommerce_payment_gateways', 'bunq_ideal_gateway_add');
@@ -133,9 +138,7 @@ function bunq_ideal_gateway_init()
 				)
 			);
 		}
-		/**
-		 *
-		 */
+		
 		public function payment_fields()
 		{
 			if ($this->description)
@@ -144,6 +147,8 @@ function bunq_ideal_gateway_init()
 			}
 			$this->payment_scripts();
 		}
+		
+		
 		/*
 		 * Custom CSS and JS to show bank selection box on checkout page
 		*/
@@ -193,12 +198,13 @@ function bunq_ideal_gateway_init()
 				<script>getIdealIssuers();</script>
     <?php
 		}
-		/*
-		 *
-		*/
+		
 		public function validate_fields()
 		{
 		}
+		
+		
+		
 		/*
 		 * We're processing the payments here
 		*/
