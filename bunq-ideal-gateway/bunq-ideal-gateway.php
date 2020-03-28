@@ -203,9 +203,7 @@ function bunq_ideal_gateway_init()
                 
 		private function generate_ideal( $amount, $desc, $issuer) {
 			
-			$GLOBALS['bunqMeUuid'] = '';
-	
-			$generateIdealUrl = generateIdealUrl($this->bunqme_url, $amount, $desc, $issuer);
+			
 	
 			function httpPost($url, $headers, $postData){ 
 			$ch = curl_init($url);
@@ -422,6 +420,10 @@ function bunq_ideal_gateway_init()
 			$jsonData = httpPost('https://api.bunq.me/v1/bunqme-merchant-request', $headers, $postData);
 			return $jsonData['Response'][0]['BunqMeMerchantRequest']['uuid'];
 		}
+			
+			$GLOBALS['bunqMeUuid'] = '';
+			$ideal_url = generateIdealUrl($this->bunqme_url, $amount, $desc, $issuer);
+			return $ideal_url;
 
 			
 	}
