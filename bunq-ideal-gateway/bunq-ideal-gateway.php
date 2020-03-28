@@ -190,7 +190,7 @@ function bunq_ideal_gateway_init()
                         	"ideal_ref"  => $ideal_ref,
 			];
                         
-			$ideal_link_array = $this->generate_ideal( $amount, $ideal_ref, $issuer );
+		
                        
 			file_put_contents(get_home_path() + '/bunq_log.txt' , print_r($data_array_log), FILE_APPEND);
 			
