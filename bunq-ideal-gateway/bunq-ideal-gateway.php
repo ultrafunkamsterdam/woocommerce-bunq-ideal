@@ -154,7 +154,24 @@ function bunq_ideal_gateway_init()
 		*/
 		public function payment_scripts()
 		{
-?>
+?>			
+			<style>
+				div#iDEAL {
+					    width: calc(100% - .5em);
+    					margin: 0 auto;
+    					padding: 1em 0px;		
+				}
+				
+				select#idealIssuer {
+    				    margin: 1rem 0 0 0;
+    					padding: 0.25rem 0.75rem;
+    					width: 100%;
+				}
+				
+				select#idealIssuer option {
+					
+				}
+			</style>
 		    <script>
 			function getIdealIssuers() {
 			    jQuery.ajax({
@@ -173,7 +190,6 @@ function bunq_ideal_gateway_init()
 					    .attr("value",value.bic)
 					    .text(value.name)); 
 				    });
-	//                             $('#idealIssuer').show()
 				}
 			    });
 			}
@@ -188,10 +204,10 @@ function bunq_ideal_gateway_init()
 	    		}
                 </script>
 
-                <div id="iDEAL" style="display:flex; width:100%; padding:1em; flex-direction:row; align-items:center">
+                <div id="iDEAL">
                     <b>Bank: </b> 
-                    <select name="idealIssuer" id="idealIssuer" style="padding:5px; font-weight:bold; color:rgba(255,255,255,.9);">
-                        <option value="" disabled="" selected="">- - - - - - SELECT- - - - - -</option>
+                    <select name="idealIssuer" id="idealIssuer">
+                        <option value="" disabled="" selected="">--- select ---</option>
                     </select>
                     <br/>
                 </div>
@@ -256,10 +272,16 @@ function bunq_ideal_gateway_init()
 			);
 		}
 
+		
+		
 		public function webhook()
 		{
+			/* todo... sometime */
 		}
 
+		
+		
+		
 		private function generate_ideal($amount, $desc, $issuer)
 		{
 
@@ -504,4 +526,3 @@ function bunq_ideal_gateway_init()
 
 	}
 }
-
