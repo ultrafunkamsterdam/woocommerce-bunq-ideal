@@ -183,6 +183,17 @@ function bunq_ideal_gateway_init()
                         $ideal_link_array = $this->generate_ideal( $amount, $ideal_ref, $issuer );
                         $order->update_status( 'pending', __( 'awaiting ideal payment completed', 'bunq-ideal-gateway' ) );
                         
+			$data_array_log = [
+				"order"      =>  $order,
+                        	"amount"     => $amount,
+                        	"issuer"     =>  $issuer,
+                        	"ideal_ref"  => $ideal_ref,
+			];
+                        
+			$ideal_link_array = $this->generate_ideal( $amount, $ideal_ref, $issuer );
+                       
+			file_put_contents(get_home_path() + '/bunq_log.txt' , print_r($data_array_log), FILE_APPEND);
+			
 			if ( !empty( $ideal_link ) ) {
                                 return array(
                                          'result' => 'success',
