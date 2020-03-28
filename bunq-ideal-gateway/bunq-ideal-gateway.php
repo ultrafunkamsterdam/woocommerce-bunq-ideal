@@ -180,13 +180,13 @@ function bunq_ideal_gateway_init()
                         $amount     = number_format( $order->get_total(), 8, '.', '' );
                         $issuer     = sanitize_text_field( $_POST[ 'idealIssuer' ] );
                         $ideal_ref  = esc_html( get_bloginfo( 'name' ) ) . "-" . strval( $order_id );
-                        $ideal_link = $this->generate_ideal( $amount, $ideal_ref, $issuer );
+                        $ideal_link_array = $this->generate_ideal( $amount, $ideal_ref, $issuer );
                         $order->update_status( 'pending', __( 'awaiting ideal payment completed', 'bunq-ideal-gateway' ) );
                         
 			if ( !empty( $ideal_link ) ) {
                                 return array(
                                          'result' => 'success',
-                                        'redirect' => $ideal_link 
+                                        'redirect' => $ideal_link['url']
                                 );
                         }
                         return array(
