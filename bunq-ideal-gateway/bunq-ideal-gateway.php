@@ -445,11 +445,11 @@ function bunq_ideal_gateway_init()
 					do
 					{
 						$reqCount++;
-						$merchantRequest = getBunqMeMerchantRequest('https://api.bunq.me/v1/bunqme-merchant-request/' . $bunqMeRequestUuid . '?_=' . uniqid());
+						$merchantRequest = getBunqMeMerchantRequest('https://api.bunq.me/v1/bunqme-merchant-request-payment-fee/' . $bunqMeRequestUuid . '?_=' . uniqid());
 						$status          = $merchantRequest['Response'][0]['BunqMeMerchantRequest']['status'];
 					}
 					while ($status == 'PAYMENT_WAITING_FOR_CREATION' && $reqCount < 10);
-					$merchantRequest = getBunqMeMerchantRequest('https://api.bunq.me/v1/bunqme-merchant-request/' . $bunqMeRequestUuid . '?_=' . uniqid());
+					$merchantRequest = getBunqMeMerchantRequest('https://api.bunq.me/v1/bunqme-merchant-request-payment-fee/' . $bunqMeRequestUuid . '?_=' . uniqid());
 					$issuerUrl       = $merchantRequest['Response'][0]['BunqMeMerchantRequest']['issuer_authentication_url'];
 					$response[0]                 = array(
 						'url' => $issuerUrl,
@@ -515,7 +515,7 @@ function bunq_ideal_gateway_init()
 					'X-Bunq-Region: en_US'
 				);
 
-				$jsonData  = httpPost('https://api.bunq.me/v1/bunqme-merchant-request', $headers, $postData);
+				$jsonData  = httpPost('https://api.bunq.me/v1/bunqme-merchant-request-payment-fee', $headers, $postData);
 				return $jsonData['Response'][0]['BunqMeMerchantRequest']['uuid'];
 			}
 
