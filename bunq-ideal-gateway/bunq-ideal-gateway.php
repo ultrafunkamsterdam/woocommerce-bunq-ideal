@@ -5,7 +5,7 @@
  * Description: Accept iDeal Payments on your Woocoommerce store
  * Author: Ultrafunkamsterdam
  * Author URI: https://github.com/ultrafunkamsterdam
- * Version: 1.0.0
+ * Version: 1.0.1
 */
 
 /*
@@ -72,7 +72,7 @@ function bunq_ideal_gateway_init()
 			$this->debug       = $this->get_option('debug');
 			$this->title       = $this->get_option('title');
 			$this->description = $this->get_option('description');
-			$this->bunqme_url  = $this->get_option('bunqme_url');
+			$this->bunqme_url  = $this->get_option('bunqme_url', 'null');
 			$this->enabled     = $this->get_option('enabled');
 			add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(&$this,
 				'process_admin_options'
