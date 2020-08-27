@@ -72,8 +72,10 @@ function bunq_ideal_gateway_init()
 			$this->debug       = $this->get_option('debug');
 			$this->title       = $this->get_option('title');
 			$this->description = $this->get_option('description');
-			$this->bunqme_url  = $this->get_option('bunqme_url', 'null');
+			$bmurl = $this->get_option('bunqme_url');
+			$bmurl = $bmurl[-1] === '/' ? $bmurl."null" : $bmurl;
 			$this->enabled     = $this->get_option('enabled');
+                        $this->bunqme_url = $bmurl;
 			add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(&$this,
 				'process_admin_options'
 			));
@@ -127,7 +129,7 @@ function bunq_ideal_gateway_init()
 					'title' => 'Bunq.me url',
 					'type' => 'text',
 					'description' => 'This should be your personal bunq.me link',
-
+					'default' => 'https://bunq.me/'
 				) ,
 				'debug' => array(
 					'title' => 'Enable/Disable',
