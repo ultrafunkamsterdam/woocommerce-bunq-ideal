@@ -1,5 +1,13 @@
-<?php
 
+<?php
+/*
+ * Plugin Name: Bunq iDeal Payment Gateway
+ * Plugin URI: https://github.com/ultrafunkamsterdam
+ * Description: Accept iDeal Payments on your Woocoommerce store
+ * Author: Ultrafunkamsterdam
+ * Author URI: https://github.com/ultrafunkamsterdam
+ * Version: 1.0.1
+ */
 
 
 
